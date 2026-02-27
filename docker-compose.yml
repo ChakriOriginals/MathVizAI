@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o}
+      - RENDER_QUALITY=${RENDER_QUALITY:-medium_quality}
+      - OUTPUT_DIR=/app/outputs
+      - TEMP_DIR=/app/tmp
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    volumes:
+      - outputs:/app/outputs
+      - tmp:/app/tmp
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - API_BASE=http://backend:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  outputs:
+  tmp:
