@@ -9,6 +9,12 @@ ALLOWED_TYPES = {"Axes", "NumberLine", "Text", "MathTex", "Graph", "Arrow", "Dot
 ALLOWED_ACTIONS = {"Create", "Write", "Transform", "FadeIn", "FadeOut", "GrowFromCenter", "ShowCreation"}
 
 SYSTEM_PROMPT = """
+
+STRICT_RULES = 
+IMPORTANT: Only use concepts, equations, and examples explicitly provided in the pedagogy plan.
+Do not invent new mathematical content.
+All MathTex expressions must use valid LaTeX notation.
+
 Convert pedagogical scenes into Manim animation instructions.
 ALLOWED object types: Axes, NumberLine, Text, MathTex, Arrow, Dot, Circle, Rectangle
 ALLOWED animation actions: Create, Write, Transform, FadeIn, FadeOut, GrowFromCenter
