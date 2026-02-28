@@ -1,4 +1,5 @@
 from __future__ import annotations
+import re
 from typing import Any, List, Optional
 from pydantic import BaseModel, Field
 
@@ -52,8 +53,19 @@ class SceneInstructionSet(BaseModel):
     scene_instructions: List[SceneInstruction]
 
 class AnimationCode(BaseModel):
-    manim_class_name: str
-    python_code: str
+    python_code: str = ""
+    manim_class_name: str = "MathVizScene"
+    code: str = ""
+
+    def model_post_init(self, __context):
+        if self.code and not self.python_code:
+            self.python_code = self.code
+        if not self.manim_class_name:
+            self.manim_class_name = "MathVizScene"
+        if self.python_code:
+            match = re.search(r'class\s+(\w+)\s*\(\s*Scene\s*\)', self.python_code)
+            if match:
+                self.manim_class_name = match.group(1)
 
 class RenderResult(BaseModel):
     video_path: Optional[str] = None
